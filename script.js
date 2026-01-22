@@ -36,14 +36,30 @@ ongoingProjects.forEach(proj => {
     status.textContent = 'In Progress' + '.'.repeat(dots);
   }, 500);
 });
-// Add in script.js
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+
+// ================= CONTACT FORM (EMAIL BACKEND ONLY) =================
+(function () {
+  emailjs.init("VlHJhHO_Ku4Mmyu6D"); // 🔴 replace with EmailJS public key
+})();
+
+document.getElementById('contactForm').addEventListener('submit', function (e) {
   e.preventDefault();
-  
-  // For EmailJS integration:
-  // emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', this)
-  //   .then(() => alert('Message sent successfully!'), (err) => alert(err));
-  
-  document.getElementById('formStatus').textContent = 'Message sent successfully!';
-  this.reset();
+
+  emailjs.sendForm(
+    "service_bcay5qg",   // 🔴 replace
+    "template_uaxms5r",  // 🔴 replace
+    this
+  )
+  .then(() => {
+    if (document.getElementById('formStatus')) {
+      document.getElementById('formStatus').textContent = 'Message sent successfully!';
+    } else {
+      alert('Message sent successfully!');
+    }
+    this.reset();
+  })
+  .catch((error) => {
+    console.error(error);
+    alert('Failed to send message. Try again.');
+  });
 });
